@@ -1,0 +1,24 @@
+h1 {
+  color: blue;
+  font-family: 'Courier New', Courier, monospace;
+}
+#parrafo2 {
+  color: red;
+}
+.parrafo_estilo_1 {
+  color: greenyellow;
+}
+p,
+h2 {
+  color: indianred;
+  font-size: 20px;
+}
+body {
+    font-family: 'Courier New', Courier, monospace;
+}
+.div1 {
+    width: 50%;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}

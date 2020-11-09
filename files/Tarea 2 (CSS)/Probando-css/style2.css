@@ -1,0 +1,14 @@
+h1 {
+  color: blue;
+}
+#parrafo2 {
+  color: red;
+}
+.parrafo_estilo_1 {
+  color: greenyellow;
+}
+p,
+h2 {
+  color: indianred;
+  font-size: 20px;
+}

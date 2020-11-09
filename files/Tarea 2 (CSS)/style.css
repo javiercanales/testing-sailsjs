@@ -1,0 +1,94 @@
+p,h2 {
+  color: green;
+  font-size: 20px;
+}
+body {
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    background-color: #141d26;
+}
+.column2 {
+    float: left;
+    width: 50%;
+}
+.col1 {
+    float: left;
+    width: 50%;
+}
+.col2 {
+    float: left;
+    width: 50%;
+}
+.vacas {
+    color: green;
+    font-weight: bold
+}
+.button {
+    color: white;
+    background-color: rgb(2, 170, 2);
+    border-radius:30px;
+    border:1px solid #ffffff;
+	display:inline-block;
+	padding:13px 25px;
+	text-decoration:none;
+    text-shadow:0px 1px 0px #2f6627;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.button:hover{
+    background-color: tomato;
+}
+
+.rrss{
+    background-color: green;
+    width: 30%; 
+    height: 30%;
+}
+.button-rrss{
+    text-decoration:none;
+}
+.imgRRSS{
+    width: 80px;
+    height: 80px;
+    padding-top: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    padding-left: 30px;
+}
+.skill{
+    background-color: #ffffff;
+    margin-bottom: 10px;
+}
+.skills-java {
+    width: 80%; 
+    background-color: #ec7526;
+}
+.skills-android {
+    width: 60%; 
+    background-color: #4CAF50;
+}
+.skills-spring {
+    width: 60%; 
+    background-color: #17e61e;
+}
+.skills-web {
+    width: 70%; 
+    background-color: #06859b;
+}
+.skills-node {
+    width: 85%; 
+    background-color: #0c9910;
+}
+.skills-pgsql {
+    width: 80%; 
+    background-color: #4c6baf;
+}
+.skills-ss {
+    width: 70%; 
+    background-color: #20188a;
+}
+.skills-py {
+    width: 60%; 
+    background-color: #00158e;
+}

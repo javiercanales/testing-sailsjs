@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<script src="main.js"></script>
+    <link
+      rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Font Awesome CSS -->
+    <script src="https://kit.fontawesome.com/bcc1c79196.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css" />
+	<title>My Website</title>
+  </head>
+
+  <body>
+		<div class="main">
+			<div class="background"></div>
+			<div class="form container">
+				<form class="form-style">
+					<div class="alert alert-success" role="alert" id="correct" style="display: none;">
+						Los datos son correctos
+					</div>
+					<div class="alert alert-warning" role="alert" id="incorrect" style="display: none;">
+						Hay datos incorrectos
+					</div>
+					<div class="form-group">
+						<b>Nombre</b>
+						<input class="form-control" type="text" id="nombre"
+							placeholder="Ingrese su nombre">
+					</div>
+					<div class="form-group">
+						<b>Apellido</b>
+						<input class="form-control"type="text" id="apellido"
+							placeholder="Ingrese su apellido">
+					</div>
+					<div class="form-group">
+						<b>Rut</b>
+						<input class="form-control"type="text" id="rut"
+							placeholder="Ingrese su RUT">
+					</div>
+					<div class="form-group">
+						<b>Email</b>
+						<input class="form-control"type="text" id="email"
+							placeholder="hello@example.com"
+							onchange="checkEmail(event)">
+					</div>
+					<div class="form-group">
+						<b>Edad</b>
+						<input class="form-control"type="text" id="edad"
+							placeholder="Ingrese su edad">
+					</div>
+					<b>Género</b><br>
+					<div class="form-group align-items-center row">
+						<input class="col-sm-6 col-md-2" type="radio" id="hombre" name="gender" value="hombre">
+						<label class="col-sm-6 col-md-2" for="male">Hombre</label>
+						<input class="col-sm-6 col-md-2" type="radio" id="mujer" name="gender" value="mujer">
+						<label class="col-sm-6 col-md-2" for="female">Mujer</label>
+						<input class="col-sm-6 col-md-2" type="radio" id="otro" name="gender" value="otro">
+						<label class="col-sm-6 col-md-2" for="other">Otro</label> 
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-info btn-block">Enviar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+  </body>
+</html>

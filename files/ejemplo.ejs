@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Javier Canales</title>
+  </head>
+  <style>
+    h1 {
+      font-family: "Courier New", Courier, monospace;
+    }
+    p,
+    h2 {
+      color: green;
+      font-size: 20px;
+    }
+    body, footer, header {
+      font-family: "Courier New", Courier, monospace;
+      color: white;
+      background-color: #141d26;
+      text-align: center;
+    }
+    .column1 {
+      float: left;
+      font-weight: bold;
+      width: 50%;
+    }
+    .column2 {
+      float: right;
+      width: 50%;
+    }
+    .button {
+      color: white;
+      background-color: green;
+    }
+    .rrss {
+      background-color: greenyellow;
+      width: 30%;
+      height: 30%;
+    }
+    .imgRRSS {
+      width: 30px;
+      height: 30px;
+    }
+  </style>
+
+  <body>
+    <header align="center">
+      <img
+        src="https://ditdental.com/assets/images/logo.png"
+        width="200px"
+        height="100px"
+      />
+    </header>
+    <div align="center">
+      <img
+        src="https://media-exp1.licdn.com/dms/image/C4D03AQEOZEdy4_tcwg/profile-displayphoto-shrink_400_400/0?e=1607558400&v=beta&t=rleEt7Gp0A7XFT5qWvqnq160ozY0VyONRvfYkgZg67s"
+        width="200px"
+        height="200px"
+      />
+      <h1>Javier Canales Castro</h1>
+      <h2><%= req.query.info %></h2>
+
+      <div class="row">
+        <div class="column1">E-mail</div>
+        <div class="column2">jcanalescz@gmail.com</div>
+
+        <div class="column1">Teléfono</div>
+        <div class="column2">+56 9 5948 0503</div>
+
+        <div class="column1" style="color: green; font-weight: bold">
+          En vacaciones
+        </div>
+        <div class="column2">undefined :(</div>
+      </div>
+
+      <a class="button" href="cv.html">Currículum</a>
+
+      <div class="rrss">
+        <a href="https://www.facebook.com">
+          <img
+            class="imgRRSS"
+            src="https://pngimg.com/uploads/facebook_logos/facebook_logos_PNG19748.png"
+          />
+        </a>
+        <a href="https://www.instagram.com">
+          <img
+            class="imgRRSS"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/768px-Instagram_logo_2016.svg.png"
+          />
+        </a>
+        <a href="https://www.twitter.com">
+          <img
+            class="imgRRSS"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Twitter_Logo_Mini.svg/1200px-Twitter_Logo_Mini.svg.png"
+          />
+        </a>
+        <a href="https://www.linkedin.com">
+          <img
+            class="imgRRSS"
+            src="https://ecoprintq.com.ar/wp-content/uploads/2020/04/linkedin-logo.png"
+          />
+        </a>
+        <a href="https://www.github.com">
+          <img
+            class="imgRRSS"
+            src="https://image.flaticon.com/icons/png/512/37/37318.png"
+          />
+        </a>
+      </div>
+    </div>
+    <footer>
+      Footer
+    </footer>
+  </body>
+</html>

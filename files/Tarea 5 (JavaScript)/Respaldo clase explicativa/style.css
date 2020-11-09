@@ -1,0 +1,85 @@
+body {
+    color: rgb(202, 202, 218);
+    font-family: "Open Sans", sans-serif;
+}
+.titulo {
+    color: crimson;
+}
+.titulo2 {
+    color: cyan;
+}
+.navbar {
+    background-color: rgb(0, 48, 48);
+    width: 100vw;
+    height: 6vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.main-content {
+    display: flex;
+    flex-direction: row;
+}
+.sidebar {
+    background-color: rgb(0, 48, 48);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex: 25;
+}
+.body {
+    display: flex;
+    flex: 75;
+}
+
+.sidebar-items {
+    list-style-type: none;
+}
+
+.button-user {
+    color: green;
+}
+.container-logo-google {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.items {
+    text-decoration: none;
+    color: rgb(247, 235, 235);
+}
+.button-bar {
+    display: none;
+}
+.out-bar {
+    display: none;
+}
+
+@media  (max-width:800px) {
+    .sidebar {
+        display: none;
+    }
+    .button-user {
+        color: green;
+        display: none;
+    }
+    .navbar {
+        /*align-items: flex-end;*/
+        flex-direction: row;
+    }
+    .button-bar {
+        display: flex;
+        flex: 10;
+    }
+    .out-bar {
+        display: flex;
+        flex: 10;
+    }
+    .home {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 80;
+    }
+}
