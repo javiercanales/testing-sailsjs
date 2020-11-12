@@ -2,8 +2,15 @@ body {
     color: rgb(72, 72, 105);
     font-family: "Open Sans", sans-serif;
 }
+table, thead, tbody, th, tr, td {
+    border: 2px solid black;
+    border-color: rgb(54, 38, 38);
+}
+th, tr, td {
+    padding: 10px;
+}
 .header {
-    height: auto;
+    height: 15vh;
     width: 100vw;
 }
 .header-row-1 {
@@ -39,15 +46,27 @@ body {
     align-items: flex-end;
 }
 .body {
-    color: darkblue;
-    height: 85vh;
-    width: 100vw;
+    height: 78vh;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 1px;
+}
+.table-body {
+    width: 98vw;
 }
 .footer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    height: auto;
+    height: 2vh;
     width: 100vw;
+}
+@media print {
+    .pagebreak { 
+        page-break-before: always;
+    }
+    /* page-break-after works, as well */
 }

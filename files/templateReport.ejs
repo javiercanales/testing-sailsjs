@@ -18,23 +18,23 @@
     <title>Reporte</title>
   </head>
 
-  <% dataArray.forEach(data => { %>
   <body>
+  <% arrayData.forEach((data, i) => { %>
     <!-- ======= Header ======= -->
-    <div class="container-fluid header">
+    <header class="container-fluid header">
       <div class="row header-row-1">
         <div class="col-3 header-c1">
           <div class="row">
-            business.name
+            <%= business.name %>
           </div>
           <div class="row">
-            business.address
+            <%= business.address %>
           </div>
           <div class="row">
-            business.town
+            <%= business.town %>
           </div>
           <div class="row">
-            business.city
+            <%= business.city %>
           </div>
         </div>
         <div class="col-6 header-c2">
@@ -61,32 +61,34 @@
             </div>
             <div class="col-8 header-c3-info">
               <div class="row">
-                page
+                <%= i+1 +' de '+pages %>
               </div>
               <div class="row">
-                date
+                <%= date %>
               </div>
               <div class="row">
-                business.user
+                <%= user.name %>
               </div>
               <div class="row">
-                business.module
+                <%= user.module %>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="header-row-2">
-        <h1>title</h1>
+      <div class="container" style="padding: 5px">
+        <div class="header-row-2">
+          <h1><%= report.title %></h1>
+        </div>
+        <div class="header-row-3">
+          <h3><%= report.subtitle %></h3>
+        </div>
       </div>
-      <div class="header-row-3">
-        <h3>subtitle</h3>
-      </div>
-    </div>
+    </header>
     
     <!-- ======= Body ======= -->
-    <div class="body card border-dark mb-3" style="max-width: 95vw; margin:auto;">
-      <table class="table-bordered">
+    <div class="body">
+      <table class="table-bordered table-body">
         <thead>
           <tr>
             <th scope="col">N°</th>
@@ -96,31 +98,25 @@
           </tr>
         </thead>
         <tbody>
-          <% data.forEach((elem, i) => { %>
+          <% data.forEach((elem, j) => { %>
             <tr>
-              <th scope="row"><%= i+1 %></th>
-              <td><%= elem.name %></td>
-              <td><%= elem.age %></td>
-              <td><%= elem.car %></td>
-              <td><%= elem.branch %></td>
-              <td><%= elem.name2 %></td>
-              <td><%= elem.age2 %></td>
-              <td><%= elem.car2 %></td>
-              <td><%= elem.branch2 %></td>
-              <td><%= elem.name3 %></td>
-              <td><%= elem.age3 %></td>
-              <td><%= elem.car3 %></td>
-              <td><%= elem.branch3 %></td>
+              <th scope="row"><%= j+1 %></th>
+              <% dataColumns.forEach((header, k) => { %>
+              <td><%= elem[header] %></td>
+              <% }) %>
             </tr>   
-            <% }) %>
+          <% }) %>
         </tbody>
       </table>
     </div>
     
     <!-- ======= Footer ======= -->
-    <div class="container footer">
+    <footer class="container footer">
       <strong>Novosystem.io</strong>
-    </div>
+    </footer>
+
+    <div class="pagebreak"> </div>
+  
+  <% }) %>
   </body>
-  <% }); %>
 </html>

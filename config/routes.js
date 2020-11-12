@@ -63,7 +63,7 @@ module.exports.routes = {
   'POST  /api/v1/deliver-contact-form-message':          { action: 'deliver-contact-form-message' },
 
   // Test endpoints
-  'GET /pdf': 'FileController.generatePDF',
+  'GET /pdf': 'PDFController.reportPDF',
   'GET /excel': 'FileController.reportExcel'
 
 };
