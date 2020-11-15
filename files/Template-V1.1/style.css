@@ -4,18 +4,21 @@ body {
 }
 td {
     border: 2px solid rgb(209, 139, 10);
-    padding: 1px;
+    word-wrap: break-word;
 }
 th {
     border: 2px solid rgb(209, 139, 10);
-    padding: 1px;
     color: rgb(209, 139, 10);
+    word-wrap: break-word;
+}
+table {
+    table-layout: fixed;
 }
 table.table-striped > thead > tr > th {
     border: 2px solid rgb(209, 139, 10);
 }
 .table-first-col {
-    width: 3%;
+    width: 4.5%;
 }
 .table-cols {
     width: auto;
