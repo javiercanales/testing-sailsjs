@@ -1,0 +1,64 @@
+<header class="container-fluid header">
+    <div class="row header-row-1">
+      <div class="col-3 header-c1">
+        <div class="row">
+          <%= business.name %>
+        </div>
+        <div class="row">
+          <%= business.address %>
+        </div>
+        <div class="row">
+          <%= business.town %>
+        </div>
+        <div class="row">
+          <%= business.city %>
+        </div>
+      </div>
+      <div class="col-6 header-c2">
+        <img 
+          src="https://novosystem.io/assets/images/logo-novosystem.png"
+          width=180px
+          height=100px>
+      </div>
+      <div class="col-3">
+        <div class="row">
+          <div class="col-4">
+            <div class="row">
+              Página:
+            </div>
+            <div class="row">
+              Fecha:
+            </div>
+            <div class="row">
+              Usuario:
+            </div>
+            <div class="row">
+              Módulo:
+            </div>
+          </div>
+          <div class="col-8 header-c3-info">
+            <div class="row">
+              <%= i+1 +' de '+pages %>
+            </div>
+            <div class="row">
+              <%= date %>
+            </div>
+            <div class="row">
+              <%= user.name %>
+            </div>
+            <div class="row">
+              <%= user.module %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container" style="padding: 5px">
+      <div class="header-row-2">
+        <h1><%= report.title %></h1>
+      </div>
+      <div class="header-row-3" style="color: rgb(255, 168, 7);">
+        <h3><%= report.subtitle %></h3>
+      </div>
+    </div>
+</header>

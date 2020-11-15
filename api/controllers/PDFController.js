@@ -12,7 +12,8 @@ const Puppeteer = require('puppeteer');
 const ejs = require('ejs');
 const fs = require('fs');
 const path = require('path');
-const ejsPath = path.join(__dirname, '../../files/templateReport.ejs');
+const ejsPathV1 = path.join(__dirname, '../../files/Template-V1/TemplateHTML.ejs');
+const ejsPathV1D1 = path.join(__dirname, '../../files/Template-V1.1/TemplateHTML.ejs');
 
 const data = require('./data.js').data;
 
@@ -22,22 +23,47 @@ const data = require('./data.js').data;
 module.exports = {
     reportPDF: async function (req, res) {
         // We generate the PDF with some features with set() method
-        columns = ["Name", "Age", "Car", "Branch", "Name 2", "age2", "car2", "branch2", "name3", "age3", "car3", "branch3"];
 
-        business = {
+        // Columns as array
+        const columns3 = [
+            "Nombre", 
+            "RUT", 
+            "Dirección", 
+            "Comuna",
+            "Test 123 probando"
+        ];
+
+        // Columns as JSON, can be used to filter attributes just by the columns needed
+        const columns = {
+            name: "Nombre", 
+            rut: "RUT", 
+            address: "Dirección", 
+            town: "Comuna",
+            test: "Test 123 probando"
+        };
+
+        const columns2 = ["Name", "Age", "Car", "Branch", "Name 2", "age2", "car2", "branch2", "name3", "age3", "car3", "branch3"];
+
+        // Business, user and report as JSON
+        const business = {
             name: 'Novosystem SpA',
-            address: 'Libertadores 1285',
+            address: 'Av Pajaritos N°3195, Of 1411',
             town: 'Maipu',
             city: 'Santiago'
         };
-        user = {
+        const user = {
             name: 'Charles Aránguiz',
             module: 'Desarrollo web'
         };
-        report = {
-            title: 'Planilla',
+        const report = {
+            title: 'Un título',
             subtitle: 'Un subtitulo'
         };
+
+        // This value will measure the length of the strings
+        // Depending on how many columns do we have, if a string is too large could lenghten a cell
+        // So, define a @normalizingValue proper for the amount of columns do you have
+        //const normalizingValue = 70;
 
         generatePDF(data, columns, business, user, report).then((pdf) => {
             res.set({
@@ -70,11 +96,381 @@ async function generatePDF(data, columns, business, user, report) {
     const date = `${day}-${month}-${year}`;
 
     // Charging the EJS template, then render to HTML
-    let templateEjs = fs.readFileSync(ejsPath, 'utf8');
+    let templateEjs = fs.readFileSync(ejsPathV1, 'utf8');
+
+    /*
+    // Read from database (table template_html)
+    let base = await TemplateHTML.findOne({ id: 1 });
+    let header = await TemplateHTML.findOne({ id: 3 });
+    let body = await TemplateHTML.findOne({ id: 4 });
+    let footer = await TemplateHTML.findOne({ id: 5 });
+
+    // Initialize the html's base and add each module (header, body, footer)
+    let templateEjs = base.html;
+    templateEjs = templateEjs.replace('{header}', header.html);
+    templateEjs = templateEjs.replace('{body}', body.html);
+    templateEjs = templateEjs.replace('{footer}', footer.html);
+
+    // Load the css, to be asigned with the puppeteer call
+    let css = await TemplateHTML.findOne({ id: 2 });
+    css = css.html; // That html doesn't mind something, it's just CSS
+    */
+
+    // This experimental value defines how many rows will be printer per page
+    // It will depend of certain things of the HTML/CSS template, like padding, margins, widths, etc.
+    const rowsPerPage = 20;
+
+    // Get the number of pages, and distribute the data in parts per page
+    const dataLength = data.length;
+    const pages = Math.ceil(dataLength/rowsPerPage); // Round the value up
+
+    let finalData = []; // The array that will contain arrays with the data for each page
+    if (pages > 1) {
+        for(i=0; i < pages; i++) {
+            finalData.push(data.slice(rowsPerPage*i, rowsPerPage*(i+1)));
+        }
+    } else {
+        finalData.push(data);
+    }
+
+    // Get the first element to get the headers
+    let keyHeaders;
+    // Variable to define the name of header's columns, to generate the html body
+    let dataColumns = [];
+    
+    // If there's no columns defined, we use the default names
+    if(!columns) {
+        keyHeaders = Object.keys(data[0]);
+        columns = [];
+        keyHeaders.forEach(header => {
+            columns.push(header);
+        });
+        dataColumns = columns.slice();
+    }
+    else { // If columns are defined
+        keyHeaders = Object.keys(columns);
+        keyHeaders.forEach(header => {
+            dataColumns.push(header);
+        });
+        console.log("cols:",columns)
+        let headers = Object.values(columns);
+        columns = [];
+        console.log("headers:",headers)
+        headers.forEach(header => {
+            columns.push(header);
+        });
+        console.log("cols2:",columns)
+    }
+
+    let html;
+    // Creates the HTML passing the request data (as example)
+    html = ejs.render(templateEjs, {
+        columns: columns,
+        dataColumns: dataColumns,
+        arrayData: finalData,
+        business: business,
+        user: user,
+        date: date,
+        report: report,
+        pages: pages,
+        rowsPerPage: rowsPerPage
+    });
+    fs.writeFileSync("./templateHTML.html", html, 'utf8');
+    
+    /**
+     * Pendiente de ver si el puppeteer puede ser lanzado al iniciar la app.
+     * Además, ver si es que se puede también dejar iniciada una page.
+     * Revisar opciones (por tema de rendimiento).
+     */
+    // Start the puppeteer API, headless
+    const browser = await Puppeteer.launch({ 
+        headless: true, 
+        args: ['--no-sandbox'] 
+    });
+    const page = await browser.newPage();
+
+    // Set the HTML to the puppeteer page, then the PDF (buffer) it's generated with some options
+    await page.setContent(html);
+    //await page.addStyleTag({content: css})
+    await page.addStyleTag({path: 'files/Template-V1/style.css'})
+    const pdf = await page.pdf({
+        format: 'A4',
+        printBackground: true
+    });
+
+    // Close the puppeteer API and return the PDF buffer
+    await browser.close();
+    return pdf;
+}
+
+/**
+ * This function generates a PDF file by printing an HTML document.
+ * The HTML is generated by a EJS template (HTML with JS embebbed)
+ * Version 1.0: This version allows to generate reports with fixed size of columns
+ * and cuts the cells if there's wrap content, obtainir a simplist version to handle quick reports.
+ * @param {*} data : the data for the report
+ * @param {*} columns : the columns names that will be headers of the data (can be null)
+ * @param {*} business : the business info for the report
+ * @param {*} user : user that generates the report
+ * @param {*} report : report's info: title and subtitle
+ */
+async function generatePDFV1D0(data, columns, business, user, report) {
+    let d = new Date();
+    const day = d.getDate();
+    const month = d.getMonth() + 1; //Month starts from 0
+    const year = d.getFullYear();
+    const date = `${day}-${month}-${year}`;
+
+    // Charging the EJS template, then render to HTML
+    let templateEjs = fs.readFileSync(ejsPathV1, 'utf8');
+    /*
+    // Read from database (table template_html)
+    let base = await TemplateHTML.findOne({ id: 1 });
+    let header = await TemplateHTML.findOne({ id: 3 });
+    let body = await TemplateHTML.findOne({ id: 4 });
+    let footer = await TemplateHTML.findOne({ id: 5 });
+
+    // Initialize the html's base and add each module (header, body, footer)
+    let templateEjs = base.html;
+    templateEjs = templateEjs.replace('{header}', header.html);
+    templateEjs = templateEjs.replace('{body}', body.html);
+    templateEjs = templateEjs.replace('{footer}', footer.html);
+
+    // Load the css, to be asigned with the puppeteer call
+    let css = await TemplateHTML.findOne({ id: 2 });
+    css = css.html; // That html doesn't mind something, it's just CSS
+    */
+
+    // This experimental value defines how many rows will be printer per page
+    // It will depend of certain things of the HTML/CSS template, like padding, margins, widths, etc.
+    const rowsPerPage = 20;
+
+    // Get the number of pages, and distribute the data in parts per page
+    const dataLength = data.length;
+    const pages = Math.ceil(dataLength/rowsPerPage); // Round the value up
+
+    let finalData = []; // The array that will contain arrays with the data for each page
+    if (pages > 1) {
+        for(i=0; i < pages; i++) {
+            finalData.push(data.slice(rowsPerPage*i, rowsPerPage*(i+1)));
+        }
+    } else {
+        finalData.push(data);
+    }
+
+    // Get the first element to get the headers
+    let keyHeaders;
+    // Variable to define the name of header's columns, to generate the html body
+    let dataColumns = [];
+    
+    // If there's no columns defined, we use the default names
+    if(!columns) {
+        keyHeaders = Object.keys(data[0]);
+        columns = [];
+        keyHeaders.forEach(header => {
+            columns.push(header);
+        });
+        dataColumns = columns.slice();
+    }
+    else { // If columns are defined
+        keyHeaders = Object.keys(columns);
+        keyHeaders.forEach(header => {
+            dataColumns.push(header);
+        });
+        console.log("cols:",columns)
+        let headers = Object.values(columns);
+        columns = [];
+        console.log("headers:",headers)
+        headers.forEach(header => {
+            columns.push(header);
+        });
+        console.log("cols2:",columns)
+    }
+
+    let html;
+    // Creates the HTML passing the request data (as example)
+    html = ejs.render(templateEjs, {
+        columns: columns,
+        dataColumns: dataColumns,
+        arrayData: finalData,
+        business: business,
+        user: user,
+        date: date,
+        report: report,
+        pages: pages,
+        rowsPerPage: rowsPerPage
+    });
+    fs.writeFileSync("./templateHTML.html", html, 'utf8');
+    
+    /**
+     * Pendiente de ver si el puppeteer puede ser lanzado al iniciar la app.
+     * Además, ver si es que se puede también dejar iniciada una page.
+     * Revisar opciones (por tema de rendimiento).
+     */
+    // Start the puppeteer API, headless
+    const browser = await Puppeteer.launch({ 
+        headless: true, 
+        args: ['--no-sandbox'] 
+    });
+    const page = await browser.newPage();
+
+    // Set the HTML to the puppeteer page, then the PDF (buffer) it's generated with some options
+    await page.setContent(html);
+    //await page.addStyleTag({content: css})
+    await page.addStyleTag({path: 'files/Template-V1/style.css'})
+    const pdf = await page.pdf({
+        format: 'A4',
+        printBackground: true
+    });
+
+    // Close the puppeteer API and return the PDF buffer
+    await browser.close();
+    return pdf;
+}
+
+// Version 2 //////////////////////////////////////////////////
+
+/**
+ * This function generate a PDF file by printing an HTML document.
+ * The HTML is generated by a EJS template (HTML with JS embebbed)
+ * @param {*} data : the data for the report
+ * @param {*} columns : the columns names that will be headers of the data (can be null)
+ * @param {*} business : the business info for the report
+ * @param {*} user : user that generates the report
+ * @param {*} report : report's info: title and subtitle
+ */
+async function generatePDFV1D1(data, columns, business, user, report, normalizingValue) {
+    let d = new Date();
+    const day = d.getDate();
+    const month = d.getMonth() + 1; //Month starts from 0
+    const year = d.getFullYear();
+    const date = `${day}-${month}-${year}`;
+
+    // Charging the EJS template, then render to HTML
+    let templateEjs = fs.readFileSync(ejsPathV1D1, 'utf8');
+
+    /*
+    // Read from database (table template_html)
+    let base = await TemplateHTML.findOne({ id: 1 });
+    let header = await TemplateHTML.findOne({ id: 3 });
+    let body = await TemplateHTML.findOne({ id: 4 });
+    let footer = await TemplateHTML.findOne({ id: 5 });
+
+    // Initialize the html's base and add each module (header, body, footer)
+    let templateEjs = base.html;
+    templateEjs = templateEjs.replace('{header}', header.html);
+    templateEjs = templateEjs.replace('{body}', body.html);
+    templateEjs = templateEjs.replace('{footer}', footer.html);
+
+    // Load the css, to be asigned with the puppeteer call
+    let css = await TemplateHTML.findOne({ id: 2 });
+    css = css.html; // That html doesn't mind something, it's just CSS
+    */
+
+    // Get the first element to get the headers (we use data and not finalData because it's the same)
+    let keyHeaders = Object.keys(data[0]);
+
+    // Define the name of header's columns, to generate the html body
+    dataColumns = [];
+    keyHeaders.forEach(header => {
+        dataColumns.push(header);
+    });
+
+    // If there's no columns defined, we use the default names
+    if(!columns) {
+        columns = dataColumns;
+    }
+
+    let html;
+    // Creates the HTML passing the request data (as example)
+    html = ejs.render(templateEjs, {
+        columns: columns,
+        dataColumns: dataColumns,
+        data: data,
+        business: business,
+        user: user,
+        date: date,
+        report: report
+    });
+    fs.writeFileSync("./templateHTMLv2.html", html, 'utf8');
+    
+    /**
+     * Pendiente de ver si el puppeteer puede ser lanzado al iniciar la app.
+     * Además, ver si es que se puede también dejar iniciada una page.
+     * Revisar opciones (por tema de rendimiento).
+     */
+    // Start the puppeteer API, headless
+    const browser = await Puppeteer.launch({ 
+        headless: true, 
+        args: ['--no-sandbox'] 
+    });
+    const page = await browser.newPage();
+
+    // Set the HTML to the puppeteer page, then the PDF (buffer) it's generated with some options
+    await page.setContent(html);
+    //await page.addStyleTag({content: css})
+    await page.addStyleTag({path: 'files/Template-V2/style.css'})
+    const pdf = await page.pdf({
+        format: 'A4',
+        printBackground: true
+    });
+
+    // Close the puppeteer API and return the PDF buffer
+    await browser.close();
+    return pdf;
+}
+
+/**
+ * This function generate a PDF file by printing an HTML document.
+ * The HTML is generated by a EJS template (HTML with JS embebbed)
+ * @param {*} data : the data for the report
+ * @param {*} columns : the columns names that will be headers of the data (can be null)
+ * @param {*} business : the business info for the report
+ * @param {*} user : user that generates the report
+ * @param {*} report : report's info: title and subtitle
+ */
+async function generatePDFV1D2(data, columns, business, user, report, normalizingValue) {
+    let d = new Date();
+    const day = d.getDate();
+    const month = d.getMonth() + 1; //Month starts from 0
+    const year = d.getFullYear();
+    const date = `${day}-${month}-${year}`;
+
+    // Charging the EJS template, then render to HTML
+    let templateEjs = fs.readFileSync(ejsPathV1, 'utf8');
+
+    /*
+    // Read from database (table template_html)
+    let base = await TemplateHTML.findOne({ id: 1 });
+    let header = await TemplateHTML.findOne({ id: 3 });
+    let body = await TemplateHTML.findOne({ id: 4 });
+    let footer = await TemplateHTML.findOne({ id: 5 });
+
+    // Initialize the html's base and add each module (header, body, footer)
+    let templateEjs = base.html;
+    templateEjs = templateEjs.replace('{header}', header.html);
+    templateEjs = templateEjs.replace('{body}', body.html);
+    templateEjs = templateEjs.replace('{footer}', footer.html);
+
+    // Load the css, to be asigned with the puppeteer call
+    let css = await TemplateHTML.findOne({ id: 2 });
+    css = css.html; // That html doesn't mind something, it's just CSS
+    */
 
     // This experimental value defines how many rows will be printer per page
     // It will depend of certain things of the HTML/CSS template, like padding or margins.
-    const rowsPerPage = 25;
+    const rowsPerPage = 20;
+
+    preparedData = []; // An array that will contain a normalized form of the data (to match a single page of report)
+    
+    // Normalice the data to a max length for a printable PDF way
+    data.forEach(value => {
+        for(key in value){
+            if (typeof value[key] === 'string' || value[key] instanceof String){
+                value[key] = value[key].substring(0, normalizingValue);
+            }
+        }
+    });
 
     // Get the number of pages, and distribute the data in parts per page
     const dataLength = data.length;
@@ -113,10 +509,16 @@ async function generatePDF(data, columns, business, user, report) {
         user: user,
         date: date,
         report: report,
-        pages: pages
+        pages: pages,
+        rowsPerPage: rowsPerPage
     });
     fs.writeFileSync("./templateHTML.html", html, 'utf8');
     
+    /**
+     * Pendiente de ver si el puppeteer puede ser lanzado al iniciar la app.
+     * Además, ver si es que se puede también dejar iniciada una page.
+     * Revisar opciones (por tema de rendimiento).
+     */
     // Start the puppeteer API, headless
     const browser = await Puppeteer.launch({ 
         headless: true, 
@@ -126,7 +528,8 @@ async function generatePDF(data, columns, business, user, report) {
 
     // Set the HTML to the puppeteer page, then the PDF (buffer) it's generated with some options
     await page.setContent(html);
-    await page.addStyleTag({path: 'files/style.css'})
+    //await page.addStyleTag({content: css})
+    await page.addStyleTag({path: 'files/Template-V1/style.css'})
     const pdf = await page.pdf({
         format: 'A4',
         printBackground: true

@@ -1,0 +1,23 @@
+<div class="body">
+    <table class="table-body">
+      <thead>
+        <tr>
+          <!-- To generate columns/headers for the report -->
+          <th scope="col">N°</th>
+          <% columns.forEach(column => { %>
+          <th scope="col"><%= column %></th>
+          <% }) %>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.forEach((elem, j) => { %>
+          <tr>
+            <td scope="row"><b><%= j+1 %></b></td>
+            <% dataColumns.forEach((header, k) => { %>
+            <td><%= elem[header] %></td>
+            <% }) %>
+          </tr>   
+        <% }) %>
+      </tbody>
+    </table>
+</div>
