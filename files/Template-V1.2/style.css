@@ -5,18 +5,14 @@ body {
 td {
     border: 2px solid rgb(209, 139, 10);
     padding: 1px;
-    white-space: nowrap;
-    overflow: hidden;
 }
 th {
     border: 2px solid rgb(209, 139, 10);
     padding: 1px;
     color: rgb(209, 139, 10);
-    white-space: nowrap;
-    overflow: hidden;
 }
 table {
-    table-layout: fixed;
+    table-layout: auto;
 }
 table.table-striped > thead > tr > th {
     border: 2px solid rgb(209, 139, 10);
@@ -26,7 +22,7 @@ table.table-striped > thead > tr > th {
     width: 97vw;
 }
 .table-first-col {
-    width: 4.5%;
+    width: 4%;
 }
 .table-cols {
     width: auto;

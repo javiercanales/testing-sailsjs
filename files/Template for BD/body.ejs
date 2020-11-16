@@ -1,23 +1,29 @@
-<div class="body">
-    <table class="table-body">
+<div class="row justify-content-center">
+  <div class="col-auto">
+    <table class="table table-sm table-striped table-body">
       <thead>
         <tr>
           <!-- To generate columns/headers for the report -->
-          <th scope="col">N°</th>
-          <% columns.forEach(column => { %>
-          <th scope="col"><%= column %></th>
+          <th scope="col" class="table-first-col">N°</th>
+          <% columns.slice(0, columns.length-1).map((column, idx) => { %>
+          <th scope="col" class="table-cols"><%= column %></th>
           <% }) %>
+          <th scope="col" class="table-last-col"><%= columns[columns.length-1] %></th>
         </tr>
       </thead>
       <tbody>
-        <% data.forEach((elem, j) => { %>
+        <% data.map((elem, j) => { %>
           <tr>
-            <td scope="row"><b><%= j+1 %></b></td>
-            <% dataColumns.forEach((header, k) => { %>
-            <td><%= elem[header] %></td>
+            <td scope="row" class="table-first-col">
+              <b><%= (currentRows) + (j+1) %></b>
+            </td>
+            <% dataColumns.slice(0, dataColumns.length-1).map((header, k) => { %>
+            <td scope="row" class="table-cols"><%= elem[header] %></td>
             <% }) %>
+            <td scope="row" class="table-last-col"><%= elem[dataColumns[dataColumns.length-1]] %></td>
           </tr>   
         <% }) %>
       </tbody>
     </table>
+  </div>
 </div>

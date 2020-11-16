@@ -120,6 +120,20 @@ columns = {
     car: "nissan"
 }
 
-let keys2 = Object.values(data[0])
+let keys2 = Object.keys(columns)
 
-console.log(keys2)
+console.log("keys2: ",keys2)
+
+console.log("NEW ARRAY: ",data)
+
+console.log("TEST: ",data['name'])
+
+let result = data.map(value => {
+    for(key in value) {
+        if(keys2.includes(key)) {
+            console.log("HERE:", key)
+        }
+    }
+});
+
+console.log(result);

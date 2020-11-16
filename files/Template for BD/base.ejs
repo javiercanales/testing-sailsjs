@@ -17,8 +17,9 @@
     <title>Reporte</title>
   </head>
 
+  <% let currentRows = 0 %>
   <body>
-  <% arrayData.forEach((data, i) => { %>
+  <% arrayData.map((data, i) => { %>
     <!-- ======= Header ======= -->
     {header}
 
@@ -29,8 +30,7 @@
     {footer}
 
     <div class="pagebreak"></div>
-  
+    <% currentRows += arrayRowsPerPage[i] %>
   <% }); %>
   </body>
-
 </html>

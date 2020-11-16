@@ -4,20 +4,16 @@ body {
 }
 td {
     border: 2px solid rgb(209, 139, 10);
-    padding: 1px;
-    white-space: nowrap;
-    overflow: hidden;
+    word-wrap: normal;
 }
 th {
     border: 2px solid rgb(209, 139, 10);
-    padding: 1px;
     color: rgb(209, 139, 10);
-    white-space: nowrap;
-    overflow: hidden;
+    word-wrap: break-word;
 }
 table {
     table-layout: fixed;
-    white-space: nowrap;
+    word-break: break-all;
 }
 table.table-striped > thead > tr > th {
     border: 2px solid rgb(209, 139, 10);
@@ -27,11 +23,9 @@ table.table-striped > thead > tr > th {
     width: 97vw;
 }
 .table-first-col {
-    width: 4%;
+    width: 4.5%;
 }
-.table-cols {
-    width: auto;
-}
+/* .table-cols in the function */
 .table-last-col {
     width: auto;
 }
